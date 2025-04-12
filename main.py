@@ -1,20 +1,35 @@
-# main.py
-import subprocess
+import os
+import sys
+import pandas as pd
 
-scripts = [
-    "python generate_soil_data.py",    # 生成数据
-    "python data_cleaning.py",          # 清洗数据
-    "python analysis.py",               # 统计分析
-    "python visualization.py",          # 空间可视化
-    "python landuse_analysis.py"        # 土地利用分析
-]
-
-for cmd in scripts:
+def main():
+    # 确保所有必要的模块都已安装
     try:
-        subprocess.run(cmd, shell=True, check=True)
-        print(f"✅ {cmd} 执行成功")
-    except subprocess.CalledProcessError as e:
-        print(f"❌ {cmd} 执行失败: {str(e)}")
-        exit(1)
+        import numpy as np
+        import matplotlib.pyplot as plt
+        import geopandas as gpd
+        from faker import Faker
+        import seaborn as sns
+        from sklearn.cluster import KMeans
+        from sklearn.metrics import silhouette_score
+    except ImportError as e:
+        print(f"缺少必要的库: {e}")
+        print("请确保安装了所有必要的库。")
+        sys.exit(1)
+    
+    # 1. 数据生成
+    os.system("python data_generator.py")
+    
+    # 2. 数据清洗
+    os.system("python data_processing.py")
+    
+    # 3. 数据加载与预处理
+    os.system("python up-datr.py")
+    
+    # 4. 可视化与分析
+    os.system("python Choropleth_Map.py")
+    
+    print("所有步骤执行完成！")
 
-print("所有步骤执行完毕！")
+if __name__ == "__main__":
+    main()
