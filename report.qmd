@@ -1,0 +1,26 @@
+# 土壤养分分析报告  
+**团队名称**：土壤科学研一小队  
+**生成日期**：`r Sys.Date()`  
+
+## 数据概况  
+- 样本总数：`r nrow(df)`  
+- 数据范围：  
+  - 经度：`r min(df$longitude)` 至 `r max(df$longitude)`  
+  - 纬度：`r min(df$latitude)` 至 `r max(df$latitude)`  
+
+## 分析结果  
+### 1. 养分空间分布  
+```{python}  
+#| code-fold: true  
+import geopandas as gpd  
+from shapely.geometry import Point  
+
+# 加载数据  
+df = pd.read_csv("data/cleaned_soil_data.csv")  
+geometry = [Point(xy) for xy in zip(df["longitude"], df["latitude"])]  
+gdf = gpd.GeoDataFrame(df, geometry=geometry, crs="EPSG:4326")  
+
+# 绘制热力图  
+gdf.plot(column="N", cmap="YlOrRd", legend=True, markersize=50)  
+plt.title("土壤氮含量空间分布")  
+plt.savefig("outputs/nitrogen_map.png")  
